@@ -1,0 +1,8 @@
+.env
+**/bin/
+**/obj/
+**/packages/
+**/Debug/
+**/Release/
+**/build/
+**/dist/
