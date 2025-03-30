@@ -6,9 +6,7 @@ namespace asp.net.Controllers
     [Route("[controller]")]
     [ApiController]
     public class TaskController(TaskService taskService) : Controller
-
     {
-
         [HttpGet]
         public async Task<IActionResult> FindAll()
         {
