@@ -14,8 +14,9 @@ builder.Services.AddDbContext<DB.DbContext>(options =>
            .LogTo(Console.WriteLine, LogLevel.Information)
            .EnableSensitiveDataLogging());
 
+builder.Services.AddControllers();
 var app = builder.Build();
-
+app.MapControllers();
 
 
 app.Run();
