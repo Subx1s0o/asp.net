@@ -1,5 +1,6 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Middleware;
 using Repositories;
 using Services;
 
@@ -21,6 +22,8 @@ builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<UserRepository>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 app.Run();
