@@ -1,3 +1,4 @@
+using DB.Models;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -5,5 +6,7 @@ namespace DB;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DbSet<Models.Task> Tasks { get; set; }
+    public DbSet<UserModel> Users { get; set; }
+
+    public DbSet<PostModel> Posts { get; set; }
 }
