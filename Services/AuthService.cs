@@ -60,7 +60,7 @@ public class AuthService(UserRepository repository, PasswordService passwordServ
     }
 
 
-    public async Task<string> Refresh(RefreshDto refreshToken)
+    public Dictionary<string, object> Refresh(RefreshDto refreshToken)
     {
         var payload = jwtService.ValidateToken(refreshToken.RefreshToken)
                       ?? throw new HttpException("Invalid refresh token", 400);
@@ -74,11 +74,11 @@ public class AuthService(UserRepository repository, PasswordService passwordServ
         }
 
         string newAccessToken = GenerateToken(userId, email);
-        string newRefreshToken = GenerateToken(userId, email, 60 * 24 * 7);
 
-        var user = await repository.FindOne(x => x.Id.ToString() == userId) ?? throw new HttpException("User not found", 404);
-
-        return newAccessToken;
+        return new Dictionary<string, object>
+        {
+            { "accessToken", newAccessToken }
+        };
     }
 
 
