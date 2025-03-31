@@ -8,10 +8,26 @@ namespace Repositories;
 
 public class UserRepository(DatabaseContext context) : IRepository<UserModel>
 {
-    public async Task<IEnumerable<UserModel>> FindAll()
+    public async Task<Dictionary<string, object>> FindAll(int page = 1, int limit = 10)
     {
-        return await context.Users.ToListAsync();
+        var users = await context.Users
+            .Skip((page - 1) * limit)
+            .Take(limit)
+            .ToListAsync();
+
+        int totalCount = await context.Users.CountAsync();
+        int totalPages = (int)Math.Ceiling((double)totalCount / limit);
+
+        return new Dictionary<string, object>
+    {
+        { "users", users },
+        { "count", totalCount },
+        { "page", page },
+        { "limit", limit },
+        { "totalPages", totalPages }
+    };
     }
+
 
     public async Task<UserModel?> FindOne(Expression<Func<UserModel, bool>> predicate)
     {
