@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto/Post/" />
+    <Folder Include="Modules/Post/Dto/" />
   </ItemGroup>
 
 </Project>
