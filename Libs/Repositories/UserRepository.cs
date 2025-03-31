@@ -8,7 +8,7 @@ namespace Repositories;
 
 public class UserRepository(DatabaseContext context) : IRepository<UserModel>
 {
-    public async Task<Dictionary<string, object>> FindAll(int page = 1, int limit = 10)
+    public async Task<Dictionary<string, object>> FindAll(int page = 1, int limit = 10, Guid? userId = null)
     {
         var users = await context.Users
             .Skip((page - 1) * limit)

@@ -1,6 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace DB.Models;
 
@@ -23,5 +24,7 @@ public class PostModel
     public required DateTime CreatedAt { get; set; }
 
     public Guid UserId { get; set; }
+
+    [JsonIgnore]
     public required UserModel User { get; set; }
 }

@@ -8,9 +8,9 @@ namespace Repositories;
 
 public class PostRepository(DatabaseContext context) : IRepository<PostModel>
 {
-    public async Task<Dictionary<string, object>> FindAll(int page = 1, int limit = 10)
+    public async Task<Dictionary<string, object>> FindAll(int page = 1, int limit = 10, Guid? userId = null)
     {
-        var posts = await context.Posts
+        var posts = await context.Posts.Where(x => userId == null || x.UserId == userId)
                    .Skip((page - 1) * limit)
                    .Take(limit)
                    .ToListAsync();
