@@ -10,14 +10,10 @@ namespace Controllers;
 [ApiController]
 public class PostController(PostService postService) : Controller
 {
-    public async Task<IActionResult> FindAll([FromQuery] string page, [FromQuery] string limit)
-    {
-        return Ok(await postService.FindAll(Convert.ToInt32(page), Convert.ToInt32(limit)));
-    }
 
-    [HttpGet("me")]
+    [HttpGet]
     [ServiceFilter(typeof(AuthFilter))]
-    public async Task<IActionResult> FindMyPosts([FromQuery] string page, [FromQuery] string limit)
+    public async Task<IActionResult> FindPosts([FromQuery] string page, [FromQuery] string limit)
     {
         var errorResult = GetUserIdFromContext(out Guid userId);
         if (errorResult != null)

@@ -14,7 +14,8 @@ public class UserModel
     public required string Name { get; set; }
 
     [JsonIgnore]
-    public required string Password { get; set; }
+    public string Password { get; set; } = string.Empty;
+
 
     public required string Email { get; set; }
 

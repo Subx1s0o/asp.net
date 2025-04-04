@@ -18,10 +18,18 @@ public class AuthService(UserRepository repository, PasswordService passwordServ
 
             return new Dictionary<string, object>
         {
-            { "user", user },
+            { "user",
+                new
+                {
+                    user.Email,
+                    user.Name,
+                    user.Nickname
+                }
+            },
             { "accessToken", accessToken },
             { "refreshToken", refreshToken }
-        };
+        }
+        ;
         }
         else
         {

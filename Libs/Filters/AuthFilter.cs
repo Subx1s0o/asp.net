@@ -20,6 +20,22 @@ public class AuthFilter(JwtService jwtService) : IActionFilter
         try
         {
             var payload = jwtService.ValidateToken(token);
+
+            if (payload == null || !payload.TryGetValue("exp", out var expValue))
+            {
+                context.Result = new UnauthorizedObjectResult(new { message = "Invalid token payload" });
+                return;
+            }
+
+            var exp = Convert.ToInt64(expValue);
+            var currentUnixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            if (exp < currentUnixTime)
+            {
+                context.Result = new UnauthorizedObjectResult(new { message = "Token expired" });
+                return;
+            }
+
             httpContext.Items["user"] = payload;
         }
         catch (Exception)
@@ -27,6 +43,7 @@ public class AuthFilter(JwtService jwtService) : IActionFilter
             context.Result = new UnauthorizedObjectResult(new { message = "Invalid or expired token" });
         }
     }
+
 
     public void OnActionExecuted(ActionExecutedContext context)
     {

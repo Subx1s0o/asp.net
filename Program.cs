@@ -18,7 +18,8 @@ builder.Services.AddDbContext<DB.DatabaseContext>(options =>
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
         options.JsonSerializerOptions.WriteIndented = true;
     });
 
@@ -30,7 +31,17 @@ builder.Services.AddScoped<PostRepository>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<AuthFilter>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Blog API", Version = "v1" });
+
+});
+
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blog API v1"));
 
 app.UseMiddleware<ExceptionMiddleware>();
 
