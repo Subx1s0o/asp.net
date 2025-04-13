@@ -3,7 +3,7 @@ using Dto;
 using Filters;
 using Microsoft.AspNetCore.Mvc;
 using Services;
-
+using Libs.Utils;
 namespace Controllers;
 
 [Route("[controller]")]
@@ -15,7 +15,7 @@ public class PostController(PostService postService) : Controller
     [ServiceFilter(typeof(AuthFilter))]
     public async Task<IActionResult> FindPosts([FromQuery] string page, [FromQuery] string limit)
     {
-        var errorResult = GetUserIdFromContext(out Guid userId);
+        var errorResult = Utils.GetUserIdFromContext(HttpContext, out Guid userId);
         if (errorResult != null)
         {
             return errorResult;
@@ -34,7 +34,7 @@ public class PostController(PostService postService) : Controller
     [ServiceFilter(typeof(AuthFilter))]
     public async Task<IActionResult> Create([FromBody] PostDto user)
     {
-        var errorResult = GetUserIdFromContext(out Guid userId);
+        var errorResult = Utils.GetUserIdFromContext(HttpContext, out Guid userId);
         if (errorResult != null)
         {
             return errorResult;
@@ -61,25 +61,6 @@ public class PostController(PostService postService) : Controller
         return Ok(await postService.Delete(id));
     }
 
-
-    private IActionResult? GetUserIdFromContext(out Guid userId)
-    {
-        userId = Guid.Empty;
-
-        if (!HttpContext.Items.TryGetValue("user", out var userObj) || userObj is not Dictionary<string, object> userData)
-        {
-            return Unauthorized(new { message = "User not found" });
-        }
-
-        if (!userData.TryGetValue("sub", out var userIdObj) ||
-            userIdObj is not string userIdString ||
-            !Guid.TryParse(userIdString, out userId))
-        {
-            return BadRequest(new { message = "Invalid user ID" });
-        }
-
-        return null;
-    }
 
 
 }
